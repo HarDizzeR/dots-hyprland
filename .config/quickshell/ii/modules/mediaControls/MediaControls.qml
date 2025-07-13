@@ -98,33 +98,46 @@ Scope {
             visible: true
 
             exclusiveZone: 0
-            implicitWidth: (
-                (mediaControlsRoot.screen.width / 2) // Middle of screen
-                    - (osdWidth / 2)                 // Dodge OSD
-                    - (widgetWidth / 2)              // Account for widget width
-            ) * 2
-            implicitHeight: playerColumnLayout.implicitHeight
+            implicitWidth: mediaControlsRoot.screen.width
+            implicitHeight: mediaControlsRoot.screen.height
             color: "transparent"
             WlrLayershell.namespace: "quickshell:mediaControls"
 
             anchors {
-                top: !Config.options.bar.bottom
-                bottom: Config.options.bar.bottom
+                top: true
+                bottom: true
                 left: true
-            }
-            mask: Region {
-                item: playerColumnLayout
+                right: true
             }
 
+            // Full-screen background to capture clicks
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    mediaControlsLoader.active = false;
+                }
+            }
+
+            // Actual media controls content
             ColumnLayout {
                 id: playerColumnLayout
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
+                anchors.top: Config.options.bar.bottom ? undefined : parent.top
+                anchors.bottom: Config.options.bar.bottom ? parent.bottom : undefined
+                anchors.topMargin: Config.options.bar.bottom ? 0 : Appearance.sizes.elevationMargin
+                anchors.bottomMargin: Config.options.bar.bottom ? Appearance.sizes.elevationMargin : 0
                 x: (mediaControlsRoot.screen.width / 2)  // Middle of screen
                     - (osdWidth / 2)                     // Dodge OSD
                     - (widgetWidth)                      // Account for widget width
                     + (Appearance.sizes.elevationMargin) // It's fine for shadows to overlap
-                spacing: -Appearance.sizes.elevationMargin // Shadow overlap okay
+                spacing: -Appearance.sizes.elevationMargin
+
+                // Block clicks from reaching the background MouseArea
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        // Do nothing - prevents background from handling click
+                    }
+                }
 
                 Repeater {
                     model: ScriptModel {

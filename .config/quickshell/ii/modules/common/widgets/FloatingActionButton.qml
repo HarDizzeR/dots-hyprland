@@ -52,7 +52,7 @@ RippleButton {
                     text: root.buttonText
                     color: Appearance.colors.colOnPrimaryContainer
                     font.pixelSize: 14
-                    font.weight: 450
+                    font.weight: 800
                 }
             }
         }

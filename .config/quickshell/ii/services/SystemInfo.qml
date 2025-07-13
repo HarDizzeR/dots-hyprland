@@ -10,10 +10,10 @@ import Quickshell.Io
  */
 Singleton {
     id: root
-    property string distroName: "Unknown"
-    property string distroId: "unknown"
-    property string distroIcon: "linux-symbolic"
-    property string username: "user"
+    property string distroName: "Arch Linux"
+    property string distroId: "arch"
+    property string distroIcon: "arch-symbolic"
+    property string username: "amadeus"
     property string homeUrl: ""
     property string documentationUrl: ""
     property string supportUrl: ""

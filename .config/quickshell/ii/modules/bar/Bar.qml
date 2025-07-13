@@ -24,7 +24,7 @@ Scope {
         Layout.topMargin: Appearance.sizes.baseBarHeight / 3
         Layout.bottomMargin: Appearance.sizes.baseBarHeight / 3
         Layout.fillHeight: true
-        implicitWidth: 1
+        implicitWidth: 0
         color: Appearance.colors.colOutlineVariant
     }
 
@@ -208,7 +208,7 @@ Scope {
                                         anchors.centerIn: parent
                                         width: 19.5
                                         height: 19.5
-                                        source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : "spark-symbolic"
+                                        source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : "cachyos-symbolic"
                                         colorize: true
                                         color: Appearance.colors.colOnLayer0
                                     }

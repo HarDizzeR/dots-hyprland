@@ -23,7 +23,8 @@ Singleton {
         "wpsoffice": "wps-office2019-kprometheus",
         "footclient": "foot",
         "zen": "zen-browser",
-        "brave-browser": "brave-desktop"
+        "thorium-browser": "thorium-browser-avx2",
+        "spotify-launcher": "spotify-launcher",
     })
     property var regexSubstitutions: [
         {

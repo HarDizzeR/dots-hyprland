@@ -101,7 +101,7 @@ DockButton {
                         visible: false // There's already color overlay
                         anchors.fill: parent
                         source: iconImageLoader
-                        desaturation: 0.8
+                        desaturation: 0
                     }
                     ColorOverlay {
                         anchors.fill: desaturatedIcon

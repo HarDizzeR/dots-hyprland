@@ -31,14 +31,14 @@ ShellRoot {
     // no unnecessary stuff will take up memory if you decide to only use, say, the overview.
     property bool enableBar: true
     property bool enableBackgroundWidgets: true
-    property bool enableCheatsheet: true
+    property bool enableCheatsheet: false
     property bool enableDock: true
     property bool enableMediaControls: true
     property bool enableNotificationPopup: true
-    property bool enableOnScreenDisplayBrightness: true
+    property bool enableOnScreenDisplayBrightness: false
     property bool enableOnScreenDisplayVolume: true
-    property bool enableOnScreenKeyboard: true
-    property bool enableOverview: true
+    property bool enableOnScreenKeyboard: false
+    property bool enableOverview: false
     property bool enableReloadPopup: true
     property bool enableScreenCorners: true
     property bool enableSession: true

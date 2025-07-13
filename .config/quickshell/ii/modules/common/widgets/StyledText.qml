@@ -6,9 +6,10 @@ Text {
     renderType: Text.NativeRendering
     verticalAlignment: Text.AlignVCenter
     font {
-        hintingPreference: Font.PreferFullHinting
+        // hintingPreference: Font.PreferFullHinting
         family: Appearance?.font.family.main ?? "sans-serif"
-        pixelSize: Appearance?.font.pixelSize.small ?? 15
+        pixelSize: Appearance?.font.pixelSize.small ?? 14
+        weight: Font.Bold
     }
     color: Appearance?.m3colors.m3onBackground ?? "black"
     linkColor: Appearance?.m3colors.m3primary
