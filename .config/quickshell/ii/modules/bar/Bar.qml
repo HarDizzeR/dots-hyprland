@@ -341,8 +341,6 @@ Scope {
                         onPressed: event => {
                             if (event.button === Qt.LeftButton) {
                                 Hyprland.dispatch('global quickshell:sidebarRightOpen');
-                            } else if (event.button === Qt.RightButton) {
-                                MprisController.activePlayer.next();
                             }
                         }
                         // Scroll to change volume
