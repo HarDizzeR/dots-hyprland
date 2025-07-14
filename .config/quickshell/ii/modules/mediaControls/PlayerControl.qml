@@ -21,8 +21,7 @@ Item { // Player instance
     required property MprisPlayer player
     property var artUrl: player?.trackArtUrl
     property string artDownloadLocation: Directories.coverArt
-    property string artFileName: Qt.md5(artUrl) + ".jpg"
-    property string artFilePath: `${artDownloadLocation}/${artFileName}`
+    property string currentArtFilePath: "" // Currently displayed art
     property color artDominantColor: ColorUtils.mix((colorQuantizer?.colors[0] ?? Appearance.colors.colPrimary), Appearance.colors.colPrimaryContainer, 0.8) || Appearance.m3colors.m3secondaryContainer
     property bool downloaded: false
     property list<real> visualizerPoints: []
@@ -66,26 +65,42 @@ Item { // Player instance
     onArtUrlChanged: {
         if (playerController.artUrl.length == 0) {
             playerController.artDominantColor = Appearance.m3colors.m3secondaryContainer
+            playerController.currentArtFilePath = ""
             return;
         }
-        // console.log("PlayerControl: Art URL changed to", playerController.artUrl)
-        // console.log("Download cmd:", coverArtDownloader.command.join(" "))
+        
+        // Don't start new download if one is already running
+        if (coverArtDownloader.running) {
+            return;
+        }
+        
+        // Calculate paths for this specific URL
+        var fileName = Qt.md5(playerController.artUrl) + ".jpg"
+        var filePath = `${artDownloadLocation}/${fileName}`
+        
+        // Set the download command with current values
+        coverArtDownloader.command = [ "bash", "-c", `[ -f ${filePath} ] || curl -sSL '${playerController.artUrl}' -o '${filePath}'` ]
+        coverArtDownloader.targetPath = filePath
+        
         playerController.downloaded = false
         coverArtDownloader.running = true
     }
 
     Process { // Cover art downloader
         id: coverArtDownloader
-        property string targetFile: playerController.artUrl
-        command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -sSL '${targetFile}' -o '${artFilePath}'` ]
+        property string targetPath: ""
+        command: []
         onExited: (exitCode, exitStatus) => {
-            playerController.downloaded = true
+            if (exitCode === 0 && targetPath.length > 0) {
+                playerController.currentArtFilePath = targetPath
+                playerController.downloaded = true
+            }
         }
     }
 
     ColorQuantizer {
         id: colorQuantizer
-        source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+        source: playerController.currentArtFilePath ? Qt.resolvedUrl(playerController.currentArtFilePath) : ""
         depth: 0 // 2^0 = 1 color
         rescaleSize: 1 // Rescale to 1x1 pixel for faster processing
     }
@@ -130,7 +145,7 @@ Item { // Player instance
         Image {
             id: blurredArt
             anchors.fill: parent
-            source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+            source: playerController.currentArtFilePath ? Qt.resolvedUrl(playerController.currentArtFilePath) : ""
             sourceSize.width: background.width
             sourceSize.height: background.height
             fillMode: Image.PreserveAspectCrop
@@ -190,7 +205,7 @@ Item { // Player instance
                     property int size: parent.height
                     anchors.fill: parent
 
-                    source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+                    source: playerController.currentArtFilePath ? Qt.resolvedUrl(playerController.currentArtFilePath) : ""
                     fillMode: Image.PreserveAspectCrop
                     cache: false
                     antialiasing: true
