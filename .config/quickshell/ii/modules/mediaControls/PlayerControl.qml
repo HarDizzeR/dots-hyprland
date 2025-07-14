@@ -22,6 +22,8 @@ Item { // Player instance
     property var artUrl: player?.trackArtUrl
     property string artDownloadLocation: Directories.coverArt
     property string currentArtFilePath: "" // Currently displayed art
+    property string expectedArtUrl: "" // URL we expect to download
+    property bool hasPendingDownload: false // Whether there's a pending download
     property color artDominantColor: ColorUtils.mix((colorQuantizer?.colors[0] ?? Appearance.colors.colPrimary), Appearance.colors.colPrimaryContainer, 0.8) || Appearance.m3colors.m3secondaryContainer
     property bool downloaded: false
     property list<real> visualizerPoints: []
@@ -66,34 +68,54 @@ Item { // Player instance
         if (playerController.artUrl.length == 0) {
             playerController.artDominantColor = Appearance.m3colors.m3secondaryContainer
             playerController.currentArtFilePath = ""
+            playerController.expectedArtUrl = ""
+            playerController.hasPendingDownload = false
             return;
         }
         
-        // Don't start new download if one is already running
+        // Set the expected URL for this download
+        playerController.expectedArtUrl = playerController.artUrl
+        
+        // If download is already running, mark as pending
         if (coverArtDownloader.running) {
+            playerController.hasPendingDownload = true
             return;
         }
+        
+        startDownload()
+    }
+
+    function startDownload() {
+        if (playerController.expectedArtUrl.length == 0) return;
         
         // Calculate paths for this specific URL
-        var fileName = Qt.md5(playerController.artUrl) + ".jpg"
+        var fileName = Qt.md5(playerController.expectedArtUrl) + ".jpg"
         var filePath = `${artDownloadLocation}/${fileName}`
         
         // Set the download command with current values
-        coverArtDownloader.command = [ "bash", "-c", `[ -f ${filePath} ] || curl -sSL '${playerController.artUrl}' -o '${filePath}'` ]
+        coverArtDownloader.command = [ "bash", "-c", `[ -f ${filePath} ] || curl -sSL '${playerController.expectedArtUrl}' -o '${filePath}'` ]
         coverArtDownloader.targetPath = filePath
+        coverArtDownloader.expectedUrl = playerController.expectedArtUrl
         
         playerController.downloaded = false
+        playerController.hasPendingDownload = false
         coverArtDownloader.running = true
     }
 
     Process { // Cover art downloader
         id: coverArtDownloader
         property string targetPath: ""
+        property string expectedUrl: ""
         command: []
         onExited: (exitCode, exitStatus) => {
-            if (exitCode === 0 && targetPath.length > 0) {
+            if (exitCode === 0 && targetPath.length > 0 && expectedUrl === playerController.expectedArtUrl) {
                 playerController.currentArtFilePath = targetPath
                 playerController.downloaded = true
+            }
+            
+            // Check if there's a pending download for a different URL
+            if (playerController.hasPendingDownload && playerController.expectedArtUrl !== expectedUrl) {
+                playerController.startDownload()
             }
         }
     }
