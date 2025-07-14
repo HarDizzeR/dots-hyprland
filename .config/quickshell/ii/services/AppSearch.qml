@@ -25,6 +25,8 @@ Singleton {
         "zen": "zen-browser",
         "thorium-browser": "thorium-browser-avx2",
         "spotify-launcher": "spotify-launcher",
+        "burp-StartBurp": "burpsuite",
+        "chromium-browser": "thorium-browser-avx2"
     })
     property var regexSubstitutions: [
         {
@@ -42,6 +44,10 @@ Singleton {
         {
             "regex": /gcr.prompter/,
             "replace": "system-lock-screen"
+        },
+        {
+            "regex": /.*burp.*/,
+            "replace": "burpsuite"
         }
     ]
 

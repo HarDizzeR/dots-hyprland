@@ -38,7 +38,7 @@ ShellRoot {
     property bool enableOnScreenDisplayBrightness: false
     property bool enableOnScreenDisplayVolume: true
     property bool enableOnScreenKeyboard: false
-    property bool enableOverview: false
+    property bool enableOverview: true
     property bool enableReloadPopup: true
     property bool enableScreenCorners: true
     property bool enableSession: true

@@ -60,7 +60,7 @@ Singleton {
     }
 
     function getData() {
-        let command = "curl -s https://wttr.in/";
+        let command = "curl -s https://wttr.in/Alexandria";
         
         // format as json
         command += "?format=j1";
