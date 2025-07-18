@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 
-import "root:/modules/common"
+import qs.modules.common
 
 Singleton {
     id: root
@@ -15,19 +15,19 @@ Singleton {
     readonly property bool useUSCS: Config.options.bar.weather.useUSCS
 
     property var data: ({
-            uv: 0,
-            humidity: 0,
-            sunrise: 0,
-            sunset: 0,
-            windDir: 0,
-            wCode: 0,
-            city: 0,
-            wind: 0,
-            precip: 0,
-            visib: 0,
-            press: 0,
-            temp: 0
-        })
+        uv: 0,
+        humidity: 0,
+        sunrise: 0,
+        sunset: 0,
+        windDir: 0,
+        wCode: 0,
+        city: 0,
+        wind: 0,
+        precip: 0,
+        visib: 0,
+        press: 0,
+        temp: 0
+    })
 
     function refineData(data) {
         let temp = {};
