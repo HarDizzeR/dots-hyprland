@@ -128,8 +128,8 @@ Scope {
                         // console.log("[Background] Least busy region output:", output)
                         if (output.length === 0) return;
                         const parsedContent = JSON.parse(output)
-                        bgRoot.clockX = parsedContent.center_x
-                        bgRoot.clockY = parsedContent.center_y
+                        bgRoot.clockX = parsedContent.center_x+75
+                        bgRoot.clockY = parsedContent.center_y-450
                         bgRoot.dominantColor = parsedContent.dominant_color || Appearance.colors.colPrimary
                     }
                 }
